@@ -122,6 +122,14 @@ class AnsibleKernel(Kernel):
         {
             'text': 'Ansible Reference',
             'url': 'https://docs.ansible.com/ansible/latest/index.html'
+        },
+        {
+            'text': 'YAML Reference',
+            'url': 'https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html'
+        },
+        {
+            'text': 'Jinja2 Template Reference',
+            'url': 'http://jinja.pocoo.org/docs/latest/templates/'
         }
     ]
 
