@@ -60,26 +60,39 @@ class CallbackModule(CallbackBase):
 
     def _dump_results(self, result):
 
-        r = result.copy()
-        if 'invocation' in r:
-            del r['invocation']
-        if 'stdout' in r:
-            if r['stdout']:
-                r['stdout'] = '[see below]'
-        if 'stdout_lines' in r:
-            if r['stdout_lines']:
-                r['stdout_lines']  = '[removed for clarity]'
-        if 'stderr' in r:
-            if r['stderr']:
-                r['stderr'] = '[see below]'
-        if 'stderr_lines' in r:
-            if r['stderr_lines']:
-                r['stderr_lines']  = '[removed for clarity]'
-        if 'changed' in r:
-            del r['changed']
-        if 'reason' in r:
-            return r['reason']
-        return super(CallbackModule, self)._dump_results(r, indent=4, sort_keys=True)
+        keys_to_remove = ['_ansible_ignore_errors',
+                          '_ansible_item_result',
+                          '_ansible_no_log',
+                          '_ansible_verbose_always']
+
+
+        result_copy = result.copy()
+        all_results = [result_copy]
+        if 'results' in result_copy:
+            all_results.extend(result_copy['results'])
+        for r in all_results:
+            for key in keys_to_remove:
+                if key in r:
+                    del r[key]
+            if 'invocation' in r:
+                del r['invocation']
+            if 'stdout' in r:
+                if r['stdout']:
+                    r['stdout'] = '[see below]'
+            if 'stdout_lines' in r:
+                if r['stdout_lines']:
+                    r['stdout_lines']  = '[removed for clarity]'
+            if 'stderr' in r:
+                if r['stderr']:
+                    r['stderr'] = '[see below]'
+            if 'stderr_lines' in r:
+                if r['stderr_lines']:
+                    r['stderr_lines']  = '[removed for clarity]'
+            if 'changed' in r:
+                del r['changed']
+            if 'reason' in r:
+                return r['reason']
+        return super(CallbackModule, self)._dump_results(result_copy, indent=4, sort_keys=True)
 
 
     @debug
